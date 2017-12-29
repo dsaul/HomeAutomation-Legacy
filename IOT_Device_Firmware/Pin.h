@@ -2,6 +2,7 @@
 #define _PIN_H_
 
 #include "common.h"
+#include "Manager.h"
 
 typedef enum {
 	kPinUseCaseUndefined = 0,
@@ -15,15 +16,16 @@ typedef enum {
 
 class Pin {
 	public:
-		const char * id;
-		uint8_t pinNumber;
-		PinUseCase useCase;
+	Manager* manager;
+	const char *id;
+	uint8_t pinNumber;
+	PinUseCase useCase;
 
-		Pin(const char * _id, uint8_t _pinNumber, PinUseCase _useCase);
-		~Pin();
-		void DoSetup();
-		void DoEnable();
-		void DoDisable();
+	Pin(const char * _id, uint8_t _pinNumber, PinUseCase _useCase);
+	~Pin();
+	void DoSetup();
+	void DoEnable();
+	void DoDisable();
 };
 
 #endif

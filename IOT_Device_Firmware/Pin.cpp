@@ -1,7 +1,13 @@
+#include "common.h"
 #include "Pin.h"
+
+extern Manager manager;
 
 Pin::Pin(const char * _id, uint8_t _pinNumber, PinUseCase _useCase)
 {
+	manager->Test();
+	
+	
 	id = _id;
 	pinNumber = _pinNumber;
 	useCase = _useCase;
@@ -14,7 +20,7 @@ Pin::~Pin()
 
 void Pin::DoSetup()
 {
-	Serial.println("Pin::doSetup()");
+	//Serial.println("Pin::doSetup()");
 	
 	switch (useCase) {
 		case kPinUseCaseOutputPrimary:
@@ -43,7 +49,11 @@ void Pin::DoEnable()
 			break;
 		case kPinUseCaseOutputPrimary:
 			digitalWrite(pinNumber, HIGH);
-			//SendNotify("enableId", "id", id);
+			
+			//manager->SendNotify("enableId", "id", id);
+
+			//manager->Test();
+
 			break;
 	}
 }
@@ -59,7 +69,7 @@ void Pin::DoDisable()
 			break;
 		case kPinUseCaseOutputPrimary:
 			digitalWrite(pinNumber, LOW);
-			//SendNotify("disableId", "id", id);
+			//manager->SendNotify("disableId", "id", id);
 			break;
 	}
 }

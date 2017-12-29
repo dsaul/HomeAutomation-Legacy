@@ -1,12 +1,9 @@
+
 #include "Manager.h"
+#include "Pin.h"
 
-
-//
-// Configuration
-//
-Pin pins[] = {
-	Pin("0", D0, kPinUseCaseOutputPrimary)
-};
+extern Pin pins[];
+extern int pinsCount;
 
 Manager::Manager()
 {
@@ -25,10 +22,10 @@ Manager::~Manager()
 
 void Manager::DoSetup()
 {
-	Serial.printf("** %d\n",sizeof(cncServer));
+	//Serial.printf("** %d\n",sizeof(cncServer));
 	
 	// Let the individual pins set themselves up.
-	for (int i = 0; i < sizeof(pins) / sizeof(*pins); i++) {
+	for (int i = 0; i < pinsCount; i++) {
 		pins[i].DoSetup();
 	}
 	
@@ -114,7 +111,7 @@ void Manager::DoLoop()
 
 void Manager::EnableId(const char *id) {
 	
-	for (int i = 0; i < sizeof(pins) / sizeof(*pins); i++) {
+	for (int i = 0; i < pinsCount; i++) {
 		if (0 == strcmp(id,pins[i].id)) {
 			pins[i].DoEnable();
 			break;
@@ -125,7 +122,7 @@ void Manager::EnableId(const char *id) {
 
 void Manager::DisableId(const char *id) {
 	
-	for (int i = 0; i < sizeof(pins) / sizeof(*pins); i++) {
+	for (int i = 0; i < pinsCount; i++) {
 		if (0 == strcmp(id,pins[i].id)) {
 			pins[i].DoDisable();
 			break;
@@ -192,7 +189,10 @@ template <class T> void Manager::SendNotify(const char * event, const char * dat
 }
 
 
-
+void Test()
+{
+	Serial.println("Test()");
+}
 
 
 

@@ -1,9 +1,9 @@
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
-#include "common.h"
-#include "Pin.h"
-
+#include <FS.h>			 //this needs to be first, or it all crashes and burns...
+#include <ArduinoJson.h>
+#include <WiFiUdp.h>
 
 class Manager {
 	/*
@@ -38,7 +38,9 @@ class Manager {
 	template <class T> void SendNotify(const char *event, const char *dataKey, T dataValue);
 	void HandleEnableIndexCMD(JsonObject &root);
 	void HandleDisableIndexCMD(JsonObject &root);
-	
+
+	void Test();
+
 	private:
 	void DoSetupSPIFFS();
 	void DoSetupWiFiManager();

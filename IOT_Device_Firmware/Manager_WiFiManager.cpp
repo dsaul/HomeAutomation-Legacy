@@ -1,4 +1,5 @@
 #include "Manager.h"
+#include <WiFiManager.h>
 
 //flag for saving data
 bool shouldSaveConfig = false;
