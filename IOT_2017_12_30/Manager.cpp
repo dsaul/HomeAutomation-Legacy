@@ -1,31 +1,25 @@
 
 #include "Manager.h"
 #include "Pin.h"
+#include <WiFiManager.h>
 
-extern Pin pins[];
-extern int pinsCount;
+std::vector<Pin> pins;
 
-Manager::Manager()
+void Manager::DoSetup()
 {
+	pins.push_back(Pin(this, "0", D0, kPinUseCaseOutputPrimary));
+
 	// Default Server Values
 	// These are overriten by config.json
 	
 	strlcpy(cncServer, "", sizeof(cncServer));
 	strlcpy(cncPort, "", sizeof(cncPort));
 	strlcpy(cncSecret, "", sizeof(cncSecret));
-}
 
-Manager::~Manager()
-{
-	
-}
-
-void Manager::DoSetup()
-{
 	//Serial.printf("** %d\n",sizeof(cncServer));
 	
 	// Let the individual pins set themselves up.
-	for (int i = 0; i < pinsCount; i++) {
+	for (int i = 0; i < pins.size(); i++) {
 		pins[i].DoSetup();
 	}
 	
@@ -38,7 +32,6 @@ void Manager::DoSetup()
 	udpSocket.begin(1234);
 
 	digitalWrite(2, HIGH); // for some reason pin 2 has to be high instead of low to be off?
-	
 }
 
 int millisLastStatus = 0;
@@ -107,11 +100,9 @@ void Manager::DoLoop()
 	
 }
 
-
-
 void Manager::EnableId(const char *id) {
 	
-	for (int i = 0; i < pinsCount; i++) {
+	for (int i = 0; i < pins.size(); i++) {
 		if (0 == strcmp(id,pins[i].id)) {
 			pins[i].DoEnable();
 			break;
@@ -122,7 +113,7 @@ void Manager::EnableId(const char *id) {
 
 void Manager::DisableId(const char *id) {
 	
-	for (int i = 0; i < pinsCount; i++) {
+	for (int i = 0; i < pins.size(); i++) {
 		if (0 == strcmp(id,pins[i].id)) {
 			pins[i].DoDisable();
 			break;
@@ -143,14 +134,21 @@ void Manager::DisableId(const char *id) {
 void Manager::SendStatus() {
 	StaticJsonBuffer<UDP_TX_PACKET_MAX_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
-	root["protocolVersion"] = 1;
+	root["pVer"] = 1;
 	root["type"] = "status";
-	root["millis"] = millis();
+	root["time"] = millis();
 	root["MAC"] = WiFi.macAddress();
 	
-	//Serial.printf("heartbeat @ %i\n", millis());
+	JsonArray& pinsJSON = root.createNestedArray("pins");
+	for (int i = 0; i < pins.size(); i++) {
+		JsonObject &object = pinsJSON.createNestedObject();
+		pins[i].PopulateStatusObject(object);
+	}
+	
+	Serial.printf("status @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
+	root.prettyPrintTo(Serial);
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 }
@@ -158,47 +156,44 @@ void Manager::SendStatus() {
 void Manager::SendACK(const char * uid) {
 	StaticJsonBuffer<UDP_TX_PACKET_MAX_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
-	root["protocolVersion"] = 1;
+	root["pVer"] = 1;
 	root["type"] = "acknowledgment";
-	root["millis"] = millis();
+	root["time"] = millis();
 	root["MAC"] = WiFi.macAddress();
 	root["uid"] = uid;
 	
-	//Serial.printf("heartbeat @ %i\n", millis());
+	//Serial.printf("ack @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 }
 
-template <class T> void Manager::SendNotify(const char * event, const char * dataKey, T dataValue) {
+void Manager::SendNotify(const char * event, const char * dataKey, const char * dataValue) {
+	SendNotifyTmpl(event, dataKey, dataValue);
+}
+
+template <class T> void Manager::SendNotifyTmpl(const char * event, const char * dataKey, T dataValue) {
 	StaticJsonBuffer<UDP_TX_PACKET_MAX_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
-	root["protocolVersion"] = 1;
+	root["pVer"] = 1;
 	root["type"] = "notify";
-	root["millis"] = millis();
+	root["time"] = millis();
 	root["MAC"] = WiFi.macAddress();
 	root["event"] = event;
 	root[dataKey] = dataValue;
 	
-	//Serial.printf("heartbeat @ %i\n", millis());
+	//Serial.printf("notify @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 }
 
-
-void Test()
+void Manager::Test()
 {
-	Serial.println("Test()");
+	Serial.println("Manager::Test()");
 }
-
-
-
-
-
-
 
 void Manager::HandleEnableIndexCMD(JsonObject& root) {
 	

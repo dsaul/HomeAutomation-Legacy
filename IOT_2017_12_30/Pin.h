@@ -1,7 +1,6 @@
 #ifndef _PIN_H_
 #define _PIN_H_
 
-#include "common.h"
 #include "Manager.h"
 
 typedef enum {
@@ -21,11 +20,12 @@ class Pin {
 	uint8_t pinNumber;
 	PinUseCase useCase;
 
-	Pin(const char * _id, uint8_t _pinNumber, PinUseCase _useCase);
-	~Pin();
+	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber, PinUseCase _useCase);
 	void DoSetup();
 	void DoEnable();
 	void DoDisable();
+
+	void PopulateStatusObject(JsonObject &object);
 };
 
 #endif
