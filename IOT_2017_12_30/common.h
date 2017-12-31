@@ -1,3 +1,4 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
 
 #include <ESP8266WiFi.h> //https://github.com/esp8266/Arduino
 #include <DNSServer.h>

@@ -1,3 +1,5 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
+
 #include "Manager.h"
 
 void Manager::DoSetupSPIFFS()

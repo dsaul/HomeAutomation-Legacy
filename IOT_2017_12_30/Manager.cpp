@@ -1,3 +1,4 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
 
 #include "Manager.h"
 #include "Pin.h"
@@ -7,7 +8,8 @@ std::vector<Pin> pins;
 
 void Manager::DoSetup()
 {
-	pins.push_back(Pin(this, "0", D0, kPinUseCaseOutputPrimary));
+	pins.push_back(Pin(this, "0", D0, true, kPinUseCaseOutputPrimary));
+	pins.push_back(Pin(this, "esp8266_built_in", 2, false, kPinUseCaseNetworkLED))
 
 	// Default Server Values
 	// These are overriten by config.json
@@ -84,9 +86,9 @@ void Manager::DoLoop()
 			Serial.print(" # ");
 			
 			if (0 == strcmp(type, "enableId")) {
-				HandleEnableIndexCMD(root);
+				HandleEnableIdCMD(root);
 			} else if (0 == strcmp(type, "disableId")) {
-				HandleDisableIndexCMD(root);
+				HandleDisableIdCMD(root);
 			}
 			
 			Serial.print("\n");
@@ -195,7 +197,7 @@ void Manager::Test()
 	Serial.println("Manager::Test()");
 }
 
-void Manager::HandleEnableIndexCMD(JsonObject& root) {
+void Manager::HandleEnableIdCMD(JsonObject& root) {
 	
 	const char * id = root["id"];
 	Serial.print("id:");
@@ -206,7 +208,7 @@ void Manager::HandleEnableIndexCMD(JsonObject& root) {
 	
 }
 
-void Manager::HandleDisableIndexCMD(JsonObject& root) {
+void Manager::HandleDisableIdCMD(JsonObject& root) {
 	
 	const char * id = root["id"];
 	Serial.print("id:");

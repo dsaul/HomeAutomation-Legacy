@@ -1,7 +1,10 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
+
 #ifndef _PIN_H_
 #define _PIN_H_
 
 #include "Manager.h"
+
 
 typedef enum {
 	kPinUseCaseUndefined = 0,
@@ -9,8 +12,7 @@ typedef enum {
 	kPinUseCaseOutputAuxilliary = 2,
 	kPinUseCaseButton = 3,
 	kPinUseCaseNetworkLED = 4,
-	kPinUseCaseNetworkLEDBuiltIn = 5,
-	kPinUseCaseOutputStatusLED = 6
+	kPinUseCaseOutputStatusLED = 5
 } PinUseCase;
 
 class Pin {
@@ -20,7 +22,10 @@ class Pin {
 	uint8_t pinNumber;
 	PinUseCase useCase;
 
-	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber, PinUseCase _useCase);
+	bool isEnabled;
+	bool isEnabledHigh;
+
+	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh, PinUseCase _useCase);
 	void DoSetup();
 	void DoEnable();
 	void DoDisable();

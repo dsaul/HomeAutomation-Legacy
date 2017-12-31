@@ -1,3 +1,5 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
+
 #include "Manager.h"
 #include <WiFiManager.h>
 
@@ -15,9 +17,9 @@ void Manager::DoSetupWiFiManager()
 	// The extra parameters to be configured (can be either global or just in the setup)
 	// After connecting, parameter.getValue() will get you the configured value
 	// id/name placeholder/prompt default length
-	WiFiManagerParameter custom_cnc_server("CncIP", "CNC Server", cncServer, 40);
-	WiFiManagerParameter custom_cnc_port("CncPort", "CNC Port", cncPort, 6);
-	WiFiManagerParameter custom_cnc_token("CncToken", "CNC Token", cncSecret, 32);
+	WiFiManagerParameter custom_cnc_server("cncServer", "CNC Server", cncServer, 40);
+	WiFiManagerParameter custom_cnc_port("cncPort", "CNC Port", cncPort, 6);
+	WiFiManagerParameter custom_cnc_token("cncSecret", "CNC Token", cncSecret, 32);
 
 	//WiFiManager
 	//Local intialization. Once its business is done, there is no need to keep it around

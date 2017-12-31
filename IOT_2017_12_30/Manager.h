@@ -1,3 +1,5 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
+
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
@@ -35,8 +37,8 @@ class Manager {
 	void SendACK(const char *uid);
 	void SendNotify(const char *event, const char *dataKey, const char *dataValue);
 	
-	void HandleEnableIndexCMD(JsonObject &root);
-	void HandleDisableIndexCMD(JsonObject &root);
+	void HandleEnableIdCMD(JsonObject &root);
+	void HandleDisableIdCMD(JsonObject &root);
 
 	void Test();
 

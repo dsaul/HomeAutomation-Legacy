@@ -1,3 +1,4 @@
+// (c) 2017-2018 Dan Saul, All Rights Reserved
 
 #include "Manager.h"
 #include "Pin.h"
@@ -10,7 +11,7 @@ void setup()
 	Serial.begin(115200);
 	Serial.println();
 	
-	Serial.println("hi");
+	//Serial.println("hi");
 	
 	manager.DoSetup();
 }
