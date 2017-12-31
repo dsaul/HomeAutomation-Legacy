@@ -23,14 +23,28 @@ void Pin::DoSetup()
 		case kPinUseCaseOutputAuxilliary:
 		case kPinUseCaseNetworkLED:
 		case kPinUseCaseOutputStatusLED:
+		{
 			pinMode(pinNumber, OUTPUT);
+			
+			// Put all pins in the off state. This can be saved 
+			// with the controller if necessasry (to preserve 
+			// flash lifetime).
+			digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
+			
 			break;
+		}
 		case kPinUseCaseButton:
+		{
 			pinMode(pinNumber, INPUT);
 			break;
+		}
 	}
 }
 
+void Pin::DoLoop()
+{
+	
+}
 
 
 void Pin::DoEnable()
@@ -47,6 +61,7 @@ void Pin::DoEnable()
 		case kPinUseCaseOutputAuxilliary:
 			break;
 		case kPinUseCaseOutputPrimary:
+		{
 			digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
 			
 			manager->SendNotify("enabledId", "id", id);
@@ -54,6 +69,7 @@ void Pin::DoEnable()
 			//manager->Test();
 			
 			break;
+		}
 	}
 }
 
@@ -68,9 +84,45 @@ void Pin::DoDisable()
 		case kPinUseCaseButton:
 			break;
 		case kPinUseCaseOutputPrimary:
+		{
 			digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
 			manager->SendNotify("disabledId", "id", id);
 			break;
+		}
+	}
+}
+
+void Pin::NotifyNetworkPacketStart()
+{
+	switch (useCase) {
+		case kPinUseCaseOutputAuxilliary:
+		case kPinUseCaseOutputPrimary:
+		case kPinUseCaseOutputStatusLED:
+		case kPinUseCaseButton:
+			// Do Nothing
+			break;
+		case kPinUseCaseNetworkLED:
+		{
+			digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
+			break;
+		}
+	}
+}
+
+void Pin::NotifyNetworkPacketEnd()
+{
+	switch (useCase) {
+		case kPinUseCaseOutputAuxilliary:
+		case kPinUseCaseOutputPrimary:
+		case kPinUseCaseOutputStatusLED:
+		case kPinUseCaseButton:
+			// Do Nothing
+			break;
+		case kPinUseCaseNetworkLED:
+		{
+			digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
+			break;
+		}
 	}
 }
 
@@ -81,27 +133,41 @@ void Pin::PopulateStatusObject(JsonObject &object)
 	object["en"] = isEnabled;
 	switch (useCase) {
 		case kPinUseCaseUndefined:
+		{
 			object["useCase"] = "?";
 			break;
+		}
 		case kPinUseCaseOutputPrimary:
+		{
 			object["useCase"] = "Pri";
 			break;
+		}
 		case kPinUseCaseOutputAuxilliary:
+		{
 			object["useCase"] = "Aux";
 			break;
+		}
 		case kPinUseCaseButton:
+		{
 			object["useCase"] = "Button";
 			break;
+		}
 		case kPinUseCaseNetworkLED:
+		{
 			object["useCase"] = "NetLED";
 			break;
+		}
 		case kPinUseCaseOutputStatusLED:
+		{
 			object["useCase"] = "OutStatLED";
 			break;
+		}
 		default:
+		{
 			char buf[5];
 			object["useCase"] = snprintf(buf, sizeof(char) * sizeof(buf), "%d", useCase);
 			break;
+		}
 	}
 	
 }

@@ -26,9 +26,16 @@ class Pin {
 	bool isEnabledHigh;
 
 	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh, PinUseCase _useCase);
+	
+	// Arduino Functions
 	void DoSetup();
+	void DoLoop();
+
 	void DoEnable();
 	void DoDisable();
+
+	void NotifyNetworkPacketStart();
+	void NotifyNetworkPacketEnd();
 
 	void PopulateStatusObject(JsonObject &object);
 };

@@ -37,15 +37,15 @@ class Manager {
 	void SendACK(const char *uid);
 	void SendNotify(const char *event, const char *dataKey, const char *dataValue);
 	
-	void HandleEnableIdCMD(JsonObject &root);
-	void HandleDisableIdCMD(JsonObject &root);
-
 	void Test();
 
 	private:
 	template <class T> void SendNotifyTmpl(const char *event, const char *dataKey, T dataValue);
 	void DoSetupSPIFFS();
 	void DoSetupWiFiManager();
+	void DoSetupNetworkReceive();
+
+	void DoLoopNetworkReceive();
 };
 
 #endif
