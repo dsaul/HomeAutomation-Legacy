@@ -9,8 +9,10 @@ std::vector<Pin> pins;
 
 void Manager::DoSetup()
 {
-	pins.push_back(Pin(this, "0", D0, true, kPinUseCaseOutputPrimary));
+	pins.push_back(Pin(this, "D0", D0, true, kPinUseCaseOutputPrimary));
+	pins.push_back(Pin(this, "D1", D1, true, kPinUseCaseButton));
 	pins.push_back(Pin(this, "esp8266_built_in", 2, false, kPinUseCaseNetworkLED));
+	pins.push_back(Pin(this, "D8", D8, true, kPinUseCaseNetworkLED));
 
 	// Default Server Values
 	// These are overriten by config.json

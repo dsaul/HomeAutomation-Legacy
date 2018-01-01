@@ -43,7 +43,20 @@ void Pin::DoSetup()
 
 void Pin::DoLoop()
 {
-	
+	switch (useCase) {
+		case kPinUseCaseOutputPrimary:
+		case kPinUseCaseOutputAuxilliary:
+		case kPinUseCaseNetworkLED:
+		case kPinUseCaseOutputStatusLED:
+			break;
+		case kPinUseCaseButton:
+		{
+			int button_pressed = digitalRead(pinNumber);
+			Serial.printf("button %d\n", button_pressed);
+			
+			break;
+		}
+	}
 }
 
 
@@ -130,7 +143,6 @@ void Pin::NotifyNetworkPacketEnd()
 void Pin::PopulateStatusObject(JsonObject &object)
 {
 	object["id"] = id;
-	object["en"] = isEnabled;
 	switch (useCase) {
 		case kPinUseCaseUndefined:
 		{
@@ -139,11 +151,13 @@ void Pin::PopulateStatusObject(JsonObject &object)
 		}
 		case kPinUseCaseOutputPrimary:
 		{
+			object["en"] = isEnabled;
 			object["useCase"] = "Pri";
 			break;
 		}
 		case kPinUseCaseOutputAuxilliary:
 		{
+			object["en"] = isEnabled;
 			object["useCase"] = "Aux";
 			break;
 		}

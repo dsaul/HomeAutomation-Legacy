@@ -23,10 +23,10 @@ void Manager::SendStatus()
 		pins[i].PopulateStatusObject(object);
 	}
 	
-	Serial.printf("status @ %i\n", millis());
+	//Serial.printf("status @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
-	root.prettyPrintTo(Serial);
+	//root.prettyPrintTo(Serial);
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 	
