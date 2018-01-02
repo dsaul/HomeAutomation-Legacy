@@ -14,6 +14,7 @@ std::vector<std::unique_ptr<Pin>> pins;
 
 void Manager::DoSetup()
 {
+	
 	pins.push_back(std::unique_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
 	pins.push_back(std::unique_ptr<PinButton>(new PinButton(this, "D1", D1)));
 	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
@@ -41,14 +42,16 @@ void Manager::DoSetup()
 }
 
 int millisLastStatus = 0;
-int statusResolution = 1000;
+int statusResolution = 5000;
 
 void Manager::DoLoop()
 {
+	
 	// Let the pins do their thing before status is sent out.
 	for (int i = 0; i < pins.size(); i++) {
 		pins[i]->DoLoop();
 	}
+	
 	
 	// Every [statusResolution]ms (default 1000) we send the 
 	// status of the pins and device to the controller. This 
@@ -69,6 +72,7 @@ void Manager::DoLoop()
 
 void Manager::EnableId(const char *id)
 {
+	
 	for (int i = 0; i < pins.size(); i++) {
 		if (0 == strcmp(id,pins[i]->id)) {
 			pins[i]->DoEnable();
@@ -80,6 +84,7 @@ void Manager::EnableId(const char *id)
 
 void Manager::DisableId(const char *id)
 {
+	
 	for (int i = 0; i < pins.size(); i++) {
 		if (0 == strcmp(id,pins[i]->id)) {
 			pins[i]->DoDisable();

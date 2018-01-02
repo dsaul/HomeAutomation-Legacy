@@ -22,9 +22,8 @@ template <class T> void Manager::SendNotifyTmpl(const char * event, const char *
 	root["MAC"] = WiFi.macAddress();
 	root["event"] = event;
 	root[dataKey] = dataValue;
-
-	Serial.print("n");
-	//Serial.printf("notify @ %i\n", millis());
+	
+	Serial.printf("> notify @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	udpSocket.print('\n');

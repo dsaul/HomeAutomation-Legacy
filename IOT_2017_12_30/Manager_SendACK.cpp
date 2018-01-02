@@ -17,9 +17,8 @@ void Manager::SendACK(const char * uid)
 	root["time"] = millis();
 	root["MAC"] = WiFi.macAddress();
 	root["uid"] = uid;
-
-	Serial.print("a");
-	//Serial.printf("ack @ %i\n", millis());
+	
+	Serial.printf("> ack @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	udpSocket.print('\n');

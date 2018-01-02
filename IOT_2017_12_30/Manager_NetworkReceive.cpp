@@ -43,20 +43,22 @@ void Manager::DoLoopNetworkReceive()
 			
 			
 			const char* type = root["type"];
-			Serial.print("# MSG # ");
+			Serial.print("< MSG[");
 			Serial.print(type);
-			Serial.print(" # ");
+			Serial.print("] ");
 			
 			if (0 == strcmp(type, "enableId")) {
 				const char * id = root["id"];
-				Serial.print("id:");
+				Serial.print("id[");
 				Serial.print(id);
+				Serial.print("]");
 				
 				EnableId(id);
 			} else if (0 == strcmp(type, "disableId")) {
 				const char * id = root["id"];
-				Serial.print("id:");
+				Serial.print("id[");
 				Serial.print(id);
+				Serial.print("]");
 				
 				DisableId(id);
 			}

@@ -23,8 +23,8 @@ void Manager::SendStatus()
 		pins[i]->PopulateStatusObject(object);
 	}
 	
-	Serial.print("s");
-	//Serial.printf("status @ %i\n", millis());
+	
+	Serial.printf("> status @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	//root.prettyPrintTo(Serial);
