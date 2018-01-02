@@ -8,7 +8,7 @@ bool shouldSaveConfig = false;
 
 //callback notifying us of the need to save config
 void saveConfigCallback () {
-	Serial.println("Should save config");
+	Serial.println("i saveConfigCallback()");
 	shouldSaveConfig = true;
 }
 
@@ -31,7 +31,7 @@ void Manager::DoSetupWiFiManager()
 	//set static ip
 	//wifiManager.setSTAStaticIPConfig(IPAddress(10,0,1,99), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
 
-	Serial.print("WiFi MAC = ");
+	Serial.print("i WiFi MAC = ");
 	Serial.println(WiFi.macAddress());
 	
 	//add all your parameters here
@@ -58,7 +58,7 @@ void Manager::DoSetupWiFiManager()
 	char ssid[32] = "IOT Device ";
 	strcat(ssid, WiFi.macAddress().c_str());
 	if (!wifiManager.autoConnect(ssid, "password")) {
-		Serial.println("failed to connect and hit timeout");
+		Serial.println("e failed to connect and hit timeout");
 		delay(3000);
 		//reset and try again, or maybe put it to deep sleep
 		ESP.reset();
@@ -66,7 +66,7 @@ void Manager::DoSetupWiFiManager()
 	}
 
 	//if you get here you have connected to the WiFi
-	Serial.println("connected...yeey :)");
+	Serial.println("i Connected to WiFi");
 
 	//read updated parameters
 	strlcpy(cncServer, custom_cnc_server.getValue(),sizeof(cncServer));
@@ -75,7 +75,7 @@ void Manager::DoSetupWiFiManager()
 
 	//save the custom parameters to FS
 	if (shouldSaveConfig) {
-		Serial.println("saving config");
+		Serial.println("i saving config");
 		DynamicJsonBuffer jsonBuffer;
 		JsonObject& json = jsonBuffer.createObject();
 		json["cncServer"] = cncServer;
@@ -84,7 +84,7 @@ void Manager::DoSetupWiFiManager()
 
 		File configFile = SPIFFS.open("/config.json", "w");
 		if (!configFile) {
-			Serial.println("failed to open config file for writing");
+			Serial.println("i failed to open config file for writing");
 		}
 
 		json.printTo(Serial);
@@ -93,6 +93,6 @@ void Manager::DoSetupWiFiManager()
 		//end save
 	}
 
-	Serial.println("local ip");
+	Serial.print("i Local IP: ");
 	Serial.println(WiFi.localIP());
 }

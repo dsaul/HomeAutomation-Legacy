@@ -52,6 +52,7 @@ void Manager::DoLoopNetworkReceive()
 				Serial.print("id[");
 				Serial.print(id);
 				Serial.print("]");
+				Serial.print("\n");
 				
 				EnableId(id);
 			} else if (0 == strcmp(type, "disableId")) {
@@ -59,11 +60,12 @@ void Manager::DoLoopNetworkReceive()
 				Serial.print("id[");
 				Serial.print(id);
 				Serial.print("]");
+				Serial.print("\n");
 				
 				DisableId(id);
 			}
 			
-			Serial.print("\n");
+			
 		}
 		
 		
