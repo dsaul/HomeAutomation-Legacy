@@ -3,6 +3,7 @@
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
+#include <memory>
 #include <vector>
 #include <FS.h>			 //this needs to be first, or it all crashes and burns...
 #include <ArduinoJson.h>

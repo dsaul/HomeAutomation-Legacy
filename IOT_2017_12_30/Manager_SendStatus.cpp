@@ -4,11 +4,11 @@
 #include "Pin.h"
 #include <WiFiManager.h>
 
-extern std::vector<Pin> pins;
+extern std::vector<Pin*> pins;
 
 void Manager::SendStatus()
 {
-	for (int i = 0; i < pins.size(); i++) pins[i].NotifyNetworkPacketStart();
+	for (int i = 0; i < pins.size(); i++) pins[i]->NotifyNetworkPacketStart();
 	
 	StaticJsonBuffer<UDP_TX_PACKET_MAX_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
@@ -20,9 +20,10 @@ void Manager::SendStatus()
 	JsonArray& pinsJSON = root.createNestedArray("pins");
 	for (int i = 0; i < pins.size(); i++) {
 		JsonObject &object = pinsJSON.createNestedObject();
-		pins[i].PopulateStatusObject(object);
+		pins[i]->PopulateStatusObject(object);
 	}
 	
+	Serial.print("s");
 	//Serial.printf("status @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
@@ -30,6 +31,6 @@ void Manager::SendStatus()
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 	
-	for (int i = 0; i < pins.size(); i++) pins[i].NotifyNetworkPacketEnd();
+	for (int i = 0; i < pins.size(); i++) pins[i]->NotifyNetworkPacketEnd();
 	
 }

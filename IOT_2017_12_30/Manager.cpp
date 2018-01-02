@@ -2,17 +2,22 @@
 
 #include "Manager.h"
 #include "Pin.h"
+#include "PinOutputPrimary.h"
+#include "PinButton.h"
+#include "PinNetworkLED.h"
+#include "PinOutputAuxilliary.h"
+#include "PinOutputStatusLED.h"
 #include <WiFiManager.h>
 
-extern std::vector<Pin> pins;
-std::vector<Pin> pins;
+extern std::vector<std::unique_ptr<Pin>> pins;
+std::vector<std::unique_ptr<Pin>> pins;
 
 void Manager::DoSetup()
 {
-	pins.push_back(Pin(this, "D0", D0, true, kPinUseCaseOutputPrimary));
-	pins.push_back(Pin(this, "D1", D1, true, kPinUseCaseButton));
-	pins.push_back(Pin(this, "esp8266_built_in", 2, false, kPinUseCaseNetworkLED));
-	pins.push_back(Pin(this, "D8", D8, true, kPinUseCaseNetworkLED));
+	pins.push_back(std::unique_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
+	pins.push_back(std::unique_ptr<PinButton>(new PinButton(this, "D1", D1)));
+	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
+	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "D8", D8, true)));
 
 	// Default Server Values
 	// These are overriten by config.json
@@ -25,7 +30,7 @@ void Manager::DoSetup()
 	
 	// Let the individual pins set themselves up.
 	for (int i = 0; i < pins.size(); i++) {
-		pins[i].DoSetup();
+		pins[i]->DoSetup();
 	}
 
 	DoSetupSPIFFS();
@@ -42,7 +47,7 @@ void Manager::DoLoop()
 {
 	// Let the pins do their thing before status is sent out.
 	for (int i = 0; i < pins.size(); i++) {
-		pins[i].DoLoop();
+		pins[i]->DoLoop();
 	}
 	
 	// Every [statusResolution]ms (default 1000) we send the 
@@ -65,8 +70,8 @@ void Manager::DoLoop()
 void Manager::EnableId(const char *id)
 {
 	for (int i = 0; i < pins.size(); i++) {
-		if (0 == strcmp(id,pins[i].id)) {
-			pins[i].DoEnable();
+		if (0 == strcmp(id,pins[i]->id)) {
+			pins[i]->DoEnable();
 			break;
 		}
 	}
@@ -76,8 +81,8 @@ void Manager::EnableId(const char *id)
 void Manager::DisableId(const char *id)
 {
 	for (int i = 0; i < pins.size(); i++) {
-		if (0 == strcmp(id,pins[i].id)) {
-			pins[i].DoDisable();
+		if (0 == strcmp(id,pins[i]->id)) {
+			pins[i]->DoDisable();
 			break;
 		}
 	}

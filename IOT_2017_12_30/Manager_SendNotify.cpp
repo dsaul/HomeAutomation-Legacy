@@ -4,7 +4,7 @@
 #include "Pin.h"
 #include <WiFiManager.h>
 
-extern std::vector<Pin> pins;
+extern std::vector<Pin*> pins;
 
 void Manager::SendNotify(const char * event, const char * dataKey, const char * dataValue) {
 	SendNotifyTmpl(event, dataKey, dataValue);
@@ -12,7 +12,7 @@ void Manager::SendNotify(const char * event, const char * dataKey, const char * 
 
 template <class T> void Manager::SendNotifyTmpl(const char * event, const char * dataKey, T dataValue) {
 	
-	for (int i = 0; i < pins.size(); i++) pins[i].NotifyNetworkPacketStart();
+	for (int i = 0; i < pins.size(); i++) pins[i]->NotifyNetworkPacketStart();
 	
 	StaticJsonBuffer<UDP_TX_PACKET_MAX_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
@@ -22,12 +22,13 @@ template <class T> void Manager::SendNotifyTmpl(const char * event, const char *
 	root["MAC"] = WiFi.macAddress();
 	root["event"] = event;
 	root[dataKey] = dataValue;
-	
+
+	Serial.print("n");
 	//Serial.printf("notify @ %i\n", millis());
 	udpSocket.beginPacket(cncServer, atoi(cncPort));
 	root.printTo(udpSocket);
 	udpSocket.print('\n');
 	udpSocket.endPacket();
 	
-	for (int i = 0; i < pins.size(); i++) pins[i].NotifyNetworkPacketEnd();
+	for (int i = 0; i < pins.size(); i++) pins[i]->NotifyNetworkPacketEnd();
 }

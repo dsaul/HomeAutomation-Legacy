@@ -5,39 +5,28 @@
 
 #include "Manager.h"
 
-
-typedef enum {
-	kPinUseCaseUndefined = 0,
-	kPinUseCaseOutputPrimary = 1,
-	kPinUseCaseOutputAuxilliary = 2,
-	kPinUseCaseButton = 3,
-	kPinUseCaseNetworkLED = 4,
-	kPinUseCaseOutputStatusLED = 5
-} PinUseCase;
-
 class Pin {
 	public:
 	Manager* manager;
 	const char *id;
 	uint8_t pinNumber;
-	PinUseCase useCase;
 
-	bool isEnabled;
-	bool isEnabledHigh;
-
-	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh, PinUseCase _useCase);
 	
+
+	Pin(Manager * _manager, const char * _id, uint8_t _pinNumber);
+	~Pin();
+
 	// Arduino Functions
-	void DoSetup();
-	void DoLoop();
+	virtual void DoSetup() = 0;
+	virtual void DoLoop() = 0;
 
-	void DoEnable();
-	void DoDisable();
+	virtual void DoEnable() = 0;
+	virtual void DoDisable() = 0;
 
-	void NotifyNetworkPacketStart();
-	void NotifyNetworkPacketEnd();
+	virtual void NotifyNetworkPacketStart() = 0;
+	virtual void NotifyNetworkPacketEnd() = 0;
 
-	void PopulateStatusObject(JsonObject &object);
+	virtual void PopulateStatusObject(JsonObject &object) = 0;
 };
 
 #endif
