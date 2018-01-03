@@ -13,7 +13,7 @@ PinNetworkLED::~PinNetworkLED()
 	
 }
 
-void PinNetworkLED::DoSetup()
+void PinNetworkLED::OnSetup()
 {
 	pinMode(pinNumber, OUTPUT);
 	
@@ -23,9 +23,19 @@ void PinNetworkLED::DoSetup()
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
 }
 
-void PinNetworkLED::DoLoop()
+void PinNetworkLED::OnLoop()
 {
 	// Do nothing.
+}
+
+void PinNetworkLED::OnEnableId(const char *_id)
+{
+	
+}
+
+void PinNetworkLED::OnDisableId(const char *_id)
+{
+	
 }
 
 

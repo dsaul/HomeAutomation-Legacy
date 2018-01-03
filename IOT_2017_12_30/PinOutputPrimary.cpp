@@ -14,7 +14,7 @@ PinOutputPrimary::~PinOutputPrimary()
 	
 }
 
-void PinOutputPrimary::DoSetup()
+void PinOutputPrimary::OnSetup()
 {
 	pinMode(pinNumber, OUTPUT);
 	
@@ -24,9 +24,19 @@ void PinOutputPrimary::DoSetup()
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
 }
 
-void PinOutputPrimary::DoLoop()
+void PinOutputPrimary::OnLoop()
 {
 	// Do nothing.
+}
+
+void PinOutputPrimary::OnEnableId(const char *_id)
+{
+	
+}
+
+void PinOutputPrimary::OnDisableId(const char *_id)
+{
+	
 }
 
 
@@ -35,8 +45,8 @@ void PinOutputPrimary::DoEnable()
 	isEnabled = true;
 
 	digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
-	
-	manager->SendNotify("OnEnable", "id", id);
+
+	manager->OnEnableId(id);
 }
 
 void PinOutputPrimary::DoDisable()
@@ -44,7 +54,8 @@ void PinOutputPrimary::DoDisable()
 	isEnabled = false;
 	
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
-	manager->SendNotify("OnDisable", "id", id);
+	
+	manager->OnDisableId(id);
 }
 
 void PinOutputPrimary::DoToggle()

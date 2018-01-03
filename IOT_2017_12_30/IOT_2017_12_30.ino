@@ -13,10 +13,10 @@ void setup()
 	
 	//Serial.println("hi");
 	
-	manager.DoSetup();
+	manager.OnSetup();
 }
 
 void loop()
 {
-	manager.DoLoop();
+	manager.OnLoop();
 }

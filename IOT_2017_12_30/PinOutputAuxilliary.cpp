@@ -14,7 +14,7 @@ PinOutputAuxilliary::~PinOutputAuxilliary()
 	
 }
 
-void PinOutputAuxilliary::DoSetup()
+void PinOutputAuxilliary::OnSetup()
 {
 	pinMode(pinNumber, OUTPUT);
 	
@@ -24,9 +24,19 @@ void PinOutputAuxilliary::DoSetup()
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
 }
 
-void PinOutputAuxilliary::DoLoop()
+void PinOutputAuxilliary::OnLoop()
 {
 	// Do nothing.
+}
+
+void PinOutputAuxilliary::OnEnableId(const char *_id)
+{
+	
+}
+
+void PinOutputAuxilliary::OnDisableId(const char *_id)
+{
+	
 }
 
 void PinOutputAuxilliary::DoEnable()
@@ -35,7 +45,7 @@ void PinOutputAuxilliary::DoEnable()
 
 	digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
 	
-	manager->SendNotify("enabledId", "id", id);
+	manager->OnEnableId(id);
 }
 
 void PinOutputAuxilliary::DoToggle()
@@ -52,7 +62,8 @@ void PinOutputAuxilliary::DoDisable()
 	isEnabled = false;
 	
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
-	manager->SendNotify("disabledId", "id", id);
+	
+	manager->OnDisableId(id);
 }
 
 void PinOutputAuxilliary::NotifyNetworkPacketStart()

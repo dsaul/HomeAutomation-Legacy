@@ -8,20 +8,34 @@
 #include "PinOutputAuxilliary.h"
 #include "PinOutputStatusLED.h"
 #include <WiFiManager.h>
+#include "ActionEnableID.h"
 #include "ActionToggleID.h"
+#include "ActionDisableID.h"
 
 extern std::vector<std::shared_ptr<Pin>> pins;
 std::vector<std::shared_ptr<Pin>> pins;
 
-void Manager::DoSetup()
+void Manager::OnSetup()
 {
+	pins.push_back(std::shared_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
+	
 	auto buttonD1 = std::shared_ptr<PinButton>(new PinButton(this, "D1", D1, true));
 	buttonD1->AddActionOnPressStart(std::shared_ptr<ActionToggleID>(new ActionToggleID(this, "D0")));
-	
-	pins.push_back(std::shared_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
 	pins.push_back(buttonD1);
+	
+	auto buttonD2 = std::shared_ptr<PinButton>(new PinButton(this, "D2", D2, true));
+	buttonD2->AddActionOnPressStart(std::shared_ptr<ActionEnableID>(new ActionEnableID(this, "D0")));
+	pins.push_back(buttonD2);
+	
+	auto buttonD3 = std::shared_ptr<PinButton>(new PinButton(this, "D3", D3, true));
+	buttonD3->AddActionOnPressStart(std::shared_ptr<ActionDisableID>(new ActionDisableID(this, "D0")));
+	pins.push_back(buttonD3);
+	
+	
+	
+	
 	pins.push_back(std::shared_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
-	pins.push_back(std::shared_ptr<PinNetworkLED>(new PinNetworkLED(this, "D8", D8, true)));
+	pins.push_back(std::shared_ptr<PinOutputStatusLED>(new PinOutputStatusLED(this, "D8", D8, true, "D0")));
 
 	// Default Server Values
 	// These are overriten by config.json
@@ -34,7 +48,7 @@ void Manager::DoSetup()
 	
 	// Let the individual pins set themselves up.
 	for (int i = 0; i < pins.size(); i++) {
-		pins[i]->DoSetup();
+		pins[i]->OnSetup();
 	}
 
 	DoSetupSPIFFS();
@@ -47,12 +61,12 @@ void Manager::DoSetup()
 int millisLastStatus = 0;
 int statusResolution = 5000;
 
-void Manager::DoLoop()
+void Manager::OnLoop()
 {
 	
 	// Let the pins do their thing before status is sent out.
 	for (int i = 0; i < pins.size(); i++) {
-		pins[i]->DoLoop();
+		pins[i]->OnLoop();
 	}
 	
 	
@@ -71,6 +85,24 @@ void Manager::DoLoop()
 	}
 
 	DoLoopNetworkReceive();
+}
+
+void Manager::OnEnableId(const char *id)
+{
+	SendNotify("OnEnableId", "id", id);
+	
+	for (int i = 0; i < pins.size(); i++) {
+		pins[i]->OnEnableId(id);
+	}
+}
+
+void Manager::OnDisableId(const char *id)
+{
+	SendNotify("OnDisableId", "id", id);
+	
+	for (int i = 0; i < pins.size(); i++) {
+		pins[i]->OnDisableId(id);
+	}
 }
 
 void Manager::EnableId(const char *id)
@@ -108,6 +140,8 @@ void Manager::ToggleId(const char *id)
 	}
 	
 }
+
+
 
 
 void Manager::Test()

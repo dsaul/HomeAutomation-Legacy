@@ -28,8 +28,10 @@ class Manager {
 	** Member Functions
 	*/
 	public:
-	void DoSetup();
-	void DoLoop();
+	void OnSetup();
+	void OnLoop();
+	void OnEnableId(const char *id);
+	void OnDisableId(const char *id);
 
 	void EnableId(const char *id);
 	void DisableId(const char *id);

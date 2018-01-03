@@ -17,8 +17,10 @@ class Pin {
 	~Pin();
 
 	// Arduino Functions
-	virtual void DoSetup() = 0;
-	virtual void DoLoop() = 0;
+	virtual void OnSetup() = 0;
+	virtual void OnLoop() = 0;
+	virtual void OnEnableId(const char *id) = 0;
+	virtual void OnDisableId(const char *id) = 0;
 
 	virtual void DoEnable() = 0;
 	virtual void DoDisable() = 0;

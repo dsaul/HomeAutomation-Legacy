@@ -13,8 +13,10 @@ class PinOutputPrimary : public Pin {
 	PinOutputPrimary(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh);
 	~PinOutputPrimary();
 
-	void DoSetup() override;
-	void DoLoop() override;
+	void OnSetup() override;
+	void OnLoop() override;
+	void OnEnableId(const char *_id) override;
+	void OnDisableId(const char *_id) override;
 	void DoEnable() override;
 	void DoDisable() override;
 	void DoToggle() override;

@@ -13,12 +13,12 @@ PinButton::~PinButton()
 	
 }
 
-void PinButton::DoSetup()
+void PinButton::OnSetup()
 {
 	pinMode(pinNumber, INPUT);
 }
 
-void PinButton::DoLoop()
+void PinButton::OnLoop()
 {
 	bool isPressed = isPullDown ? !!digitalRead(pinNumber) : !digitalRead(pinNumber);
 	
@@ -39,6 +39,16 @@ void PinButton::DoLoop()
 	
 	
 	//Serial.printf("button %d\n", pressed);
+}
+
+void PinButton::OnEnableId(const char *id)
+{
+	
+}
+
+void PinButton::OnDisableId(const char *id)
+{
+	
 }
 
 void PinButton::DoEnable()

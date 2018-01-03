@@ -2,10 +2,11 @@
 
 #include "PinOutputStatusLED.h"
 
-PinOutputStatusLED::PinOutputStatusLED(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh)
+PinOutputStatusLED::PinOutputStatusLED(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isEnabledHigh, const char * _observedId)
 	: Pin(_manager, _id, _pinNumber)
 {
 	isEnabledHigh = _isEnabledHigh;
+	observedId = _observedId;
 }
 
 PinOutputStatusLED::~PinOutputStatusLED()
@@ -13,7 +14,7 @@ PinOutputStatusLED::~PinOutputStatusLED()
 	
 }
 
-void PinOutputStatusLED::DoSetup()
+void PinOutputStatusLED::OnSetup()
 {
 	pinMode(pinNumber, OUTPUT);
 	
@@ -23,9 +24,23 @@ void PinOutputStatusLED::DoSetup()
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
 }
 
-void PinOutputStatusLED::DoLoop()
+void PinOutputStatusLED::OnLoop()
 {
 	// Do nothing.
+}
+
+void PinOutputStatusLED::OnEnableId(const char *_id)
+{
+	if (0 == strcmp(observedId,_id)) {
+		digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
+	}
+}
+
+void PinOutputStatusLED::OnDisableId(const char *_id)
+{
+	if (0 == strcmp(observedId,_id)) {
+		digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
+	}
 }
 
 void PinOutputStatusLED::DoEnable()
