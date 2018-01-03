@@ -26,9 +26,14 @@ void PinButton::DoLoop()
 		wasPressed = isPressed;
 		
 		if (isPressed) {
-			manager->SendNotify("buttonPushBegin", "id", id);
+			manager->SendNotify("OnPressStart", "id", id);
+			
+			for (int i = 0; i < actionsOnPressStart.size(); i++) {
+				actionsOnPressStart[i]->DoAction();
+			}
+			
 		} else {
-			manager->SendNotify("buttonPushEnd", "id", id);
+			manager->SendNotify("OnPressEnd", "id", id);
 		}
 	}
 	
@@ -61,4 +66,9 @@ void PinButton::PopulateStatusObject(JsonObject &object)
 {
 	object["id"] = id;
 	object["useCase"] = "Button";
+}
+
+void PinButton::AddActionOnPressStart(std::shared_ptr<Action> _new)
+{
+	actionsOnPressStart.push_back(_new);
 }

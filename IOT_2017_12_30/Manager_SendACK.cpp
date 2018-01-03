@@ -4,7 +4,7 @@
 #include "Pin.h"
 #include <WiFiManager.h>
 
-extern std::vector<Pin*> pins;
+extern std::vector<std::shared_ptr<Pin>> pins;
 
 void Manager::SendACK(const char * uid)
 {

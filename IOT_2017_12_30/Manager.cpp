@@ -8,17 +8,20 @@
 #include "PinOutputAuxilliary.h"
 #include "PinOutputStatusLED.h"
 #include <WiFiManager.h>
+#include "ActionEnableID.h"
 
-extern std::vector<std::unique_ptr<Pin>> pins;
-std::vector<std::unique_ptr<Pin>> pins;
+extern std::vector<std::shared_ptr<Pin>> pins;
+std::vector<std::shared_ptr<Pin>> pins;
 
 void Manager::DoSetup()
 {
+	auto buttonD1 = std::shared_ptr<PinButton>(new PinButton(this, "D1", D1, true));
+	buttonD1->AddActionOnPressStart(std::shared_ptr<ActionEnableID>(new ActionEnableID(this, "D0")));
 	
-	pins.push_back(std::unique_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
-	pins.push_back(std::unique_ptr<PinButton>(new PinButton(this, "D1", D1, true)));
-	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
-	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "D8", D8, true)));
+	pins.push_back(std::shared_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
+	pins.push_back(buttonD1);
+	pins.push_back(std::shared_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
+	pins.push_back(std::shared_ptr<PinNetworkLED>(new PinNetworkLED(this, "D8", D8, true)));
 
 	// Default Server Values
 	// These are overriten by config.json

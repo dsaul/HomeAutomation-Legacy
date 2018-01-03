@@ -4,6 +4,7 @@
 #define _PIN_BUTTON_H_
 
 #include "Pin.h"
+#include "Action.h"
 
 class PinButton : public Pin {
 	public:
@@ -20,8 +21,11 @@ class PinButton : public Pin {
 	void NotifyNetworkPacketEnd() override;
 	void PopulateStatusObject(JsonObject &object) override;
 	
+	void AddActionOnPressStart(std::shared_ptr<Action> _new);
+	
 	private:
 	bool wasPressed;
+	std::vector<std::shared_ptr<Action>> actionsOnPressStart;
 };
 
 #endif

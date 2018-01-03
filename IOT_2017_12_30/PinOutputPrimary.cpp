@@ -36,7 +36,7 @@ void PinOutputPrimary::DoEnable()
 
 	digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);
 	
-	manager->SendNotify("enabledId", "id", id);
+	manager->SendNotify("OnEnable", "id", id);
 }
 
 void PinOutputPrimary::DoDisable()
@@ -44,7 +44,7 @@ void PinOutputPrimary::DoDisable()
 	isEnabled = false;
 	
 	digitalWrite(pinNumber, isEnabledHigh ? LOW : HIGH);
-	manager->SendNotify("disabledId", "id", id);
+	manager->SendNotify("OnDisable", "id", id);
 }
 
 void PinOutputPrimary::NotifyNetworkPacketStart()
