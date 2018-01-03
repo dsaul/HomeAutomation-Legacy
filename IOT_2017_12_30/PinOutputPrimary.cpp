@@ -47,6 +47,15 @@ void PinOutputPrimary::DoDisable()
 	manager->SendNotify("OnDisable", "id", id);
 }
 
+void PinOutputPrimary::DoToggle()
+{
+	if (isEnabled) {
+		DoDisable();
+	} else {
+		DoEnable();
+	}
+}
+
 void PinOutputPrimary::NotifyNetworkPacketStart()
 {
 	

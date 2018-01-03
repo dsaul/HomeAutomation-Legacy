@@ -38,6 +38,15 @@ void PinOutputAuxilliary::DoEnable()
 	manager->SendNotify("enabledId", "id", id);
 }
 
+void PinOutputAuxilliary::DoToggle()
+{
+	if (isEnabled) {
+		DoDisable();
+	} else {
+		DoEnable();
+	}
+}
+
 void PinOutputAuxilliary::DoDisable()
 {
 	isEnabled = false;

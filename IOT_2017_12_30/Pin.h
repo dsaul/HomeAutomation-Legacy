@@ -22,6 +22,7 @@ class Pin {
 
 	virtual void DoEnable() = 0;
 	virtual void DoDisable() = 0;
+	virtual void DoToggle() = 0;
 
 	virtual void NotifyNetworkPacketStart() = 0;
 	virtual void NotifyNetworkPacketEnd() = 0;

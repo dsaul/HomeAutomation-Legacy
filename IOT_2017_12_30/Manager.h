@@ -33,6 +33,7 @@ class Manager {
 
 	void EnableId(const char *id);
 	void DisableId(const char *id);
+	void ToggleId(const char *id);
 
 	void SendStatus();
 	void SendACK(const char *uid);

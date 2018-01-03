@@ -39,6 +39,11 @@ void PinOutputStatusLED::DoDisable()
 	// Do nothing.
 }
 
+void PinOutputStatusLED::DoToggle()
+{
+	// Do nothing.
+}
+
 void PinOutputStatusLED::NotifyNetworkPacketStart()
 {
 	// Do nothing.

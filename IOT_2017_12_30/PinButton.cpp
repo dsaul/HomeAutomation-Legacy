@@ -52,6 +52,11 @@ void PinButton::DoDisable()
 	// Do nothing.
 }
 
+void PinButton::DoToggle()
+{
+	// Do nothing.
+}
+
 void PinButton::NotifyNetworkPacketStart()
 {
 	// Do nothing.

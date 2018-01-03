@@ -1,6 +1,6 @@
 // (c) 2017-2018 Dan Saul, All Rights Reserved
 
-#import "ActionEnableID.h"
+#include "ActionEnableID.h"
 
 ActionEnableID::ActionEnableID(Manager * _manager, const char * _id)
 	: Action(_manager)
@@ -15,7 +15,5 @@ ActionEnableID::~ActionEnableID()
 
 void ActionEnableID::DoAction()
 {
-	//Serial.println("DoAction()");
-
 	manager->EnableId(id);
 }

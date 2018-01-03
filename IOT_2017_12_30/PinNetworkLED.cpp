@@ -40,6 +40,11 @@ void PinNetworkLED::DoDisable()
 	// Do nothing.
 }
 
+void PinNetworkLED::DoToggle()
+{
+	// Do nothing.
+}
+
 void PinNetworkLED::NotifyNetworkPacketStart()
 {
 	digitalWrite(pinNumber, isEnabledHigh ? HIGH : LOW);

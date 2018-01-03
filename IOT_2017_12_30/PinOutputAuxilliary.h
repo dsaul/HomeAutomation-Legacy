@@ -17,6 +17,7 @@ class PinOutputAuxilliary : public Pin {
 	void DoLoop() override;
 	void DoEnable() override;
 	void DoDisable() override;
+	void DoToggle() override;
 	void NotifyNetworkPacketStart() override;
 	void NotifyNetworkPacketEnd() override;
 	void PopulateStatusObject(JsonObject &object) override;

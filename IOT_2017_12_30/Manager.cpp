@@ -8,7 +8,7 @@
 #include "PinOutputAuxilliary.h"
 #include "PinOutputStatusLED.h"
 #include <WiFiManager.h>
-#include "ActionEnableID.h"
+#include "ActionToggleID.h"
 
 extern std::vector<std::shared_ptr<Pin>> pins;
 std::vector<std::shared_ptr<Pin>> pins;
@@ -16,7 +16,7 @@ std::vector<std::shared_ptr<Pin>> pins;
 void Manager::DoSetup()
 {
 	auto buttonD1 = std::shared_ptr<PinButton>(new PinButton(this, "D1", D1, true));
-	buttonD1->AddActionOnPressStart(std::shared_ptr<ActionEnableID>(new ActionEnableID(this, "D0")));
+	buttonD1->AddActionOnPressStart(std::shared_ptr<ActionToggleID>(new ActionToggleID(this, "D0")));
 	
 	pins.push_back(std::shared_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
 	pins.push_back(buttonD1);
@@ -96,6 +96,19 @@ void Manager::DisableId(const char *id)
 	}
 	
 }
+
+void Manager::ToggleId(const char *id)
+{
+	
+	for (int i = 0; i < pins.size(); i++) {
+		if (0 == strcmp(id,pins[i]->id)) {
+			pins[i]->DoToggle();
+			break;
+		}
+	}
+	
+}
+
 
 void Manager::Test()
 {
