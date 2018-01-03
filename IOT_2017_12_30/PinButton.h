@@ -7,7 +7,9 @@
 
 class PinButton : public Pin {
 	public:
-	PinButton(Manager * _manager, const char * _id, uint8_t _pinNumber);
+	bool isPullDown;
+	
+	PinButton(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isPullDown);
 	~PinButton();
 
 	void DoSetup() override;
@@ -17,6 +19,9 @@ class PinButton : public Pin {
 	void NotifyNetworkPacketStart() override;
 	void NotifyNetworkPacketEnd() override;
 	void PopulateStatusObject(JsonObject &object) override;
+	
+	private:
+	bool wasPressed;
 };
 
 #endif

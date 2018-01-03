@@ -2,10 +2,10 @@
 
 #include "PinButton.h"
 
-PinButton::PinButton(Manager * _manager, const char * _id, uint8_t _pinNumber)
+PinButton::PinButton(Manager * _manager, const char * _id, uint8_t _pinNumber, bool _isPullDown)
 	: Pin(_manager, _id, _pinNumber)
 {
-	
+	isPullDown = _isPullDown;
 }
 
 PinButton::~PinButton()
@@ -20,8 +20,20 @@ void PinButton::DoSetup()
 
 void PinButton::DoLoop()
 {
-	int button_pressed = digitalRead(pinNumber);
-	//Serial.printf("button %d\n", button_pressed);
+	bool isPressed = isPullDown ? !!digitalRead(pinNumber) : !digitalRead(pinNumber);
+	
+	if (isPressed != wasPressed) {
+		wasPressed = isPressed;
+		
+		if (isPressed) {
+			manager->SendNotify("buttonPushBegin", "id", id);
+		} else {
+			manager->SendNotify("buttonPushEnd", "id", id);
+		}
+	}
+	
+	
+	//Serial.printf("button %d\n", pressed);
 }
 
 void PinButton::DoEnable()

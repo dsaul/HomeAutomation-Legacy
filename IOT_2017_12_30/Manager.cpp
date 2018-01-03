@@ -16,7 +16,7 @@ void Manager::DoSetup()
 {
 	
 	pins.push_back(std::unique_ptr<PinOutputPrimary>(new PinOutputPrimary(this, "D0", D0, true)));
-	pins.push_back(std::unique_ptr<PinButton>(new PinButton(this, "D1", D1)));
+	pins.push_back(std::unique_ptr<PinButton>(new PinButton(this, "D1", D1, true)));
 	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "esp8266_built_in", 2, false)));
 	pins.push_back(std::unique_ptr<PinNetworkLED>(new PinNetworkLED(this, "D8", D8, true)));
 
